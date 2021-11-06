@@ -1,11 +1,16 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def hello_world():
-    return "hello world"
+    return ":)"
+
+
+@app.route("/login")
+def login():
+    return "login :)"
 
 
 if __name__ == '__main__':
