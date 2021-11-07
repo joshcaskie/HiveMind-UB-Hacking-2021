@@ -34,7 +34,33 @@
                         {%for i in rows%}
                     <tr>
                         <td>{{i[1]}}</td>
-                        <td>{{i[3]}}: {{i[7]}}, {{i[4]}}: {{i[8]}}, {{i[5]}}: {{i[9]}}, {{i[6]}}: {{i[10]}},</td>
+                        <td>{{i[3]}}: {{i[7]}}, {{i[4]}}: {{i[8]}}, {{i[5]}}: {{i[9]}}, {{i[6]}}: {{i[10]}}</td>
+                    </tr>
+                {%endfor%}
+                </tbody>
+            </table>
+
+            <!--  User Scores -->
+        <div class="row mb-3">
+            <h1 class="text-center">Your Choices</h1>
+        </div>
+
+        <!--  Table for questions and choices  -->
+        <!--  https://getbootstrap.com/docs/5.0/content/tables/  -->
+        <div class="row mb-3 text-center">
+            <table class="table table-warning table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Question</th>
+                        <th scope="col">Answer</th>
+                    </tr>
+                </thead>
+                <tbody>
+<!--  Insert templating here-->
+                        {%for question,answer in to_template.items()%}
+                    <tr>
+                        <td>{{question}}</td>
+                        <td>{{answer}}</td>
                     </tr>
                 {%endfor%}
                 </tbody>
