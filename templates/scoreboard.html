@@ -30,11 +30,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                <!--  Insert templating here  -->
+                        {%for i in rows%}
                     <tr>
-                        <!--  Insert templating here  -->
-                        <td>Is water wet?</td>
-                        <td>Yes: 10000, No: 1</td>
+                        <td>{{i[1]}}</td>
+                        <td>{{i[3]}}: {{i[7]}}, {{i[4]}}: {{i[8]}}, {{i[5]}}: {{i[9]}}, {{i[6]}}: {{i[10]}},</td>
                     </tr>
+                {%endfor%}
                 </tbody>
             </table>
         </div>

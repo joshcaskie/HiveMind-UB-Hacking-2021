@@ -25,7 +25,8 @@ function sendAnswer() {
     }
     else {
         console.log(selectedAnswer);
-        socket.emit('answer', {data: selectedAnswer, qid: -100});
+        var que1 = document.getElementById("que").innerHTML;
+        socket.emit('answer', {data: selectedAnswer, que: que1});
         // document.getElementById("answer").innerHTML = "You selected the current hive's choice!";
     }
 }

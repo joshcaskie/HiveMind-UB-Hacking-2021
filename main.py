@@ -12,13 +12,18 @@ def makeTables(conn):
         cur.execute("INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a1','If the gingerbread man is living in a gingerbread house, is he made out of his house or is his house made out of his skin?', 1, 'he is made out of his house','his house is made out of his skin','','',0,0,0,0)")
         cur.execute("INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a2','Is every food a soup or a sandwich', 2, 'yes','no','','',0,0,0,0)")
         cur.execute("INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a3','which orange came first -- the fruit or the color?', 3, 'fruit','color','','',0,0,0,0)")
-        cur.execute("INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a4','what is Ethan Blanton''s last name?', 4, 'Alphonece','Hunt','Hartloff','Ethan',0,0,0,0)")
+        cur.execute("INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a4','what is Ethan Blanton''s last name?', 4, 'Alphonce','Hunt','Hartloff','Ethan',0,0,0,0)")
         conn.commit()
 
 def addNewUser(conn, token):
     with conn.cursor() as cur:
         cur.execute("INSERT INTO userinfo VALUES ('"+token+"', 100, '"+token+"', 0)")
         conn.commit()
+
+        cur.execute("SELECT * FROM userinfo")
+        stuff = cur.fetchall()
+        print("hi")
+        print(stuff)
 
     conn.close()
 
@@ -48,19 +53,30 @@ def grabQuestionString(conn):
 
 # Conn for connection to database, ans is the given answer from the user and the question
 def increment(conn, ans, que, token):
+
+    if (ans != 1 and ans != 2 and ans != 3 and ans != 4):
+        conn.close()
+        return
+
     with conn.cursor() as cur:
         # Below would be answer1 - answer 4 based on input
-        updatedAnswer = "answer" + str(ans)
-        cur.execute("SELECT " + updatedAnswer + " FROM questions")
-        rows = cur.fetchall()
+        cur.execute("SELECT * FROM questions WHERE questionID = " + str(que))
+        row = cur.fetchall()
+        print(que)
+        print(row)
         conn.commit()
-        ansUpdate = 0
-        for row in rows:
-            if (row[1] == que):
-                ansUpdate += row[6 + (ans - 1)] + 1
-        cur.execute("UPDATE questions SET " + updatedAnswer + " = " + ansUpdate)
-        cur.execute("UPDATE userinfo SET userAnswer = " + ans + "WHERE token =" + token)
-        conn.commmit()
+        col = "answer" + str(ans)
+        print(col)
+        current = row[0][6+ans]
+        print(current)
+        cur.execute("UPDATE questions SET " + col + " = " + str(current+1) + " WHERE questionID =" + str(que))
+
+        # saves that the user answered the question
+        # cur.execute("UPDATE userinfo SET userAnswer = " + str(ans) + " WHERE token = " + token)
+        # cur.execute("SELECT * FROM userinfo")
+        # stuff = cur.fetchall()
+        # print(stuff)
+        conn.commit()
 
 
 # Returns most common question answer given the question ID

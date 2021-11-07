@@ -34,15 +34,13 @@ conn.close()
 
 @app.route("/")
 def question_page():
-    conn = psycopg2.connect(conn_string)
 
     user_cookie = request.cookies.get('userID', default='-1')
     if cookie_exists(user_cookie):
 
+        conn = psycopg2.connect(conn_string)
         q_row = main.grabQuestionString(conn)
         q_data = q_row[0]
-
-        print(q_row)
 
         question = q_data[1]
         id = q_data[2]
@@ -51,19 +49,12 @@ def question_page():
         choice3 = q_data[5]
         choice4 = q_data[6]
 
-        print(question)
-        print(id)
-        print(choice1)
-        print(choice2)
-
         # Render
-        return render_template("question.html")
+        return render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id)
     else:
-
+        conn = psycopg2.connect(conn_string)
         q_row = main.grabQuestionString(conn)
         q_data = q_row[0]
-
-        print(q_row)
 
         question = q_data[1]
         id = q_data[2]
@@ -72,19 +63,15 @@ def question_page():
         choice3 = q_data[5]
         choice4 = q_data[6]
 
-        print(question)
-        print(id)
-        print(choice1)
-        print(choice2)
-
         # Render
-        resp = make_response(render_template("question.html"))
+        resp = make_response(render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id))
 
         cookie = generate_cookie()
-        print(cookie)
+        # print(cookie)
         resp.set_cookie('userID', cookie)
 
         # Adds user to a table
+        conn = psycopg2.connect(conn_string)
         main.addNewUser(conn, cookie)
 
         return resp
@@ -96,9 +83,9 @@ def scoreboard():
     user_cookie = request.cookies.get('userID', default='-1')
     if cookie_exists(user_cookie):
 
-        conn = psycopg2.connect(conn_string)
-        q_rows = main.grabAllUser(conn)
-        print(q_rows)
+        # conn = psycopg2.connect(conn_string)
+        # q_rows = main.grabAllUser(conn)
+        # print(q_rows)
 
         # q_data = q_row[0]
         #
@@ -121,7 +108,22 @@ def scoreboard():
         for i in rows:
             print(i)
 
-        return render_template("scoreboard.html")
+            question = i[1]
+            choice1 = i[3]
+            choice2 = i[4]
+            choice3 = i[5]
+            choice4 = i[6]
+            num1 = i[7]
+            num2 = i[8]
+            num3 = i[9]
+            num4 = i[10]
+
+            print(num1)
+            print(num2)
+            print(num3)
+            print(num4)
+
+        return render_template("scoreboard.html", rows=rows)
     else:
         # Render
         resp = make_response(render_template("question.html"))
@@ -131,6 +133,7 @@ def scoreboard():
         resp.set_cookie('userID', cookie)
 
         # Adds user to a table
+        conn = psycopg2.connect(conn_string)
         main.addNewUser(conn, cookie)
 
         return resp
@@ -138,14 +141,22 @@ def scoreboard():
 
 @socketio.on('answer')
 def button_pressed(data):
+    print(data)
     # Handle the choice for the user
     answer = data['data']
+    que = data['que']
 #     question_id = data['qid']
 #     main.increment("connection thingy", answer, question_id)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
-    emit("answer", {"message" : "you are with the hive"}, json=True)
+
+    # emit("answer", {"message" : "you are with the hive"}, json=True)
+    conn = psycopg2.connect(conn_string)
+    main.increment(conn, int(answer), int(que), "n/a")
+
+    # conn = psycopg2.connect(conn_string)
+    # Perhaps revist, try token, try anything? It's supposed to emit if the user was "right or wrong"
 
     print("message should have sent!")
     pass

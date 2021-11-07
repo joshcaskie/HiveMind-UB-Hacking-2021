@@ -21,20 +21,39 @@
 
         <!--  Question  -->
         <div class="row mb-3">
-            <h3 class="text-center">Is water wet?</h3>
+            <h3 class="text-center">{{ question }}</h3>
 
             <!--  We can set up templating for these button components based on the database question having x amount of choices!  -->
             <!--  https://getbootstrap.com/docs/5.0/components/button-group/#checkbox-and-radio-button-groups  -->
             <div class="row mb-3">
                 <div id="selectanswer" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+                    {%if choice1 != "": %}
                 <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value="1">
-                <label class="btn btn-outline-success" for="btnradio1">Yes</label>
+                <label class="btn btn-outline-success" for="btnradio1">{{choice1}}</label>
+                    {%else%}
+                    {%endif%}
 
+                    {%if choice2 != "": %}
                 <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" value="2">
-                <label class="btn btn-outline-danger" for="btnradio2">No</label>
+                <label class="btn btn-outline-danger" for="btnradio2">{{choice2}}</label>
+                    {%else%}
+                    {%endif%}
 
-                <!--<input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio3">Radio 3</label>-->
+                    {%if choice3 != "": %}
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" value="3">
+                <label class="btn btn-outline-warning" for="btnradio3">{{choice3}}</label>
+                    {%else%}
+                    {%endif%}
+
+                    {%if choice4 != "": %}
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" value="4">
+                <label class="btn btn-outline-info" for="btnradio4">{{choice4}}</label>
+                    {%else%}
+                    {%endif%}
+
+                    <div id="que" hidden>{{que}}</div>
+
                 </div>
             </div>
 
