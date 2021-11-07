@@ -45,7 +45,8 @@ def scoreboard():
 def button_pressed(data):
     # Handle the choice for the user
     answer = data['data']
-    main.increment("connection thingy", answer, -1)
+    question_id = data['qid']
+    main.increment("connection thingy", answer, question_id)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
