@@ -46,7 +46,7 @@ def button_pressed(jsondata):
     # Handle the choice for the user
     data = json.loads(jsondata)
     main.increment("connection thingy", data[data], -1)
-    print(jsondata)
+    print(data)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
