@@ -7,7 +7,11 @@ Programmed in Python and JavaScript
 ---------------
 About
 ---------------
-A game-like decision system for settling the answers to the world's most controversial questions!
+-Users can access the game via hivemindub.tech and answer various questioned presented to them from multiple choices.
+
+-The answers from users of all time is stored into a database, and if a user has answered with the most common answer (the "right" answer) they receive points
+
+-If users enter the "wrong" answer, they lose points
 
 ---------------
 Features
@@ -16,7 +20,7 @@ Features
 
 -A points system that is displayed for each user
 
--Scoreboard page to see which users have answered the most "right" questions
+-Input buttons for the user to choose answers from
 
 ---------------
 Resources and References
