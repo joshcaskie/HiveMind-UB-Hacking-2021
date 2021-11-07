@@ -42,11 +42,10 @@ def scoreboard():
 
 
 @socketio.on('answer')
-def button_pressed(jsondata):
+def button_pressed(data):
     # Handle the choice for the user
-    data = json.loads(jsondata)
-    main.increment("connection thingy", data[data], -1)
-    print(data)
+    answer = data['data']
+    main.increment("connection thingy", answer, -1)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
