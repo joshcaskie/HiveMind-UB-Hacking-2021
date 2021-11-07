@@ -39,7 +39,6 @@ def grabQuestionString(conn):
         cur.execute("SELECT question FROM questions WHERE questionID = " + str(number))
         q = cur.fetchall()
         conn.commit()
-        print(q)
         return q[0][0]
 
 
@@ -93,7 +92,6 @@ def main():
     #     cur.execute("DROP TABLE userinfo")
     #     conn.commit()
     makeTables(conn)
-    print(grabQuestionString(conn))
     with conn.cursor() as cur:
         cur.execute("DROP TABLE questions")
         cur.execute("DROP TABLE userinfo")
