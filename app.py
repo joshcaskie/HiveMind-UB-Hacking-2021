@@ -1,8 +1,12 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, make_response, url_for
 from flask_socketio import SocketIO, emit, send
 
 import main
 import json
+
+# https://www.educative.io/edpresso/how-to-generate-a-random-string-in-python
+import random
+import string
 
 # Flask documentation:
 # https://flask.palletsprojects.com/en/2.0.x/quickstart/#static-files
@@ -17,12 +21,22 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def question_page():
-    return render_template("question.html")
+    if cookie_exists(request):
+        return render_template("question.html")
+    else:
+        resp = make_response(render_template("question.html"))
+        resp.set_cookie('userID', generate_cookie())
+        return resp
 
 
 @app.route("/scoreboard")
 def scoreboard():
-    return render_template("scoreboard.html")
+    if cookie_exists(request):
+        return render_template("scoreboard.html")
+    else:
+        resp = make_response(render_template("scoreboard.html"))
+        resp.set_cookie('userID', generate_cookie())
+        return resp
 
 
 @socketio.on('answer')
@@ -38,6 +52,22 @@ def button_pressed(jsondata):
 
     print("message should have sent!")
     pass
+
+
+# https://pythonbasics.org/flask-cookies/
+def cookie_exists(req):
+    user_cookie = req.cookies.get('userID', default='-1')
+    if user_cookie == '-1':
+        return True
+    else:
+        return False
+
+
+# https://pynative.com/python-generate-random-string/#h-steps-to-create-a-random-string
+def generate_cookie():
+    characters = string.ascii_letters + string.digits
+    cookie = ''.join(random.choice(characters) for i in range(30))
+    return cookie
 
 
 if __name__ == '__main__':
