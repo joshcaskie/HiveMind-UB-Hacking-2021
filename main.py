@@ -20,6 +20,8 @@ def addNewUser(conn, token):
         cur.execute("INSERT INTO userinfo VALUES ('"+token+"', 100, '"+token+"', 0)")
         conn.commit()
 
+    conn.close()
+
 def grabQuestionString(conn):
     # with conn.cursor() as cur:
     #     cur.execute("SELECT question FROM questions")
@@ -41,6 +43,8 @@ def grabQuestionString(conn):
         conn.commit()
         return q
 
+    conn.close()
+
 
 # Conn for connection to database, ans is the given answer from the user and the question
 def increment(conn, ans, que, token):
@@ -60,16 +64,13 @@ def increment(conn, ans, que, token):
 
 
 # Returns most common question answer given the question ID
-def mostCommon(conn, que):
+def mostCommon(conn):
     with conn.cursor() as cur:
-        cur.execute("SELECT answer1,answer2,answer3,answer4 FROM questions")
+        cur.execute("SELECT * FROM questions")
         rows = cur.fetchall()
         conn.commit()
-        for row in rows:
-            if (row[1] == que):
-                max1 = max(row[6], row[7])
-                max2 = max(max1, row[8])
-                return max(max2, row[9])
+    conn.close()
+    return rows
 
 
 # Update user score given their score to be added and their unique token.
@@ -86,7 +87,11 @@ def grabAllUser(conn):
         cur.execute("SELECT * FROM userinfo")
         rows = cur.fetchall()
         conn.commit()
-        return rows
+
+    conn.close()
+    return rows
+
+
 
 def main():
     conn_string = input('Enter a connection string:\n')
