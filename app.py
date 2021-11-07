@@ -21,7 +21,8 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def question_page():
-    if cookie_exists(request):
+    user_cookie = request.cookies.get('userID', default='-1')
+    if cookie_exists(user_cookie):
         return render_template("question.html")
     else:
         resp = make_response(render_template("question.html"))
@@ -31,7 +32,8 @@ def question_page():
 
 @app.route("/scoreboard")
 def scoreboard():
-    if cookie_exists(request):
+    user_cookie = request.cookies.get('userID', default='-1')
+    if cookie_exists(user_cookie):
         return render_template("scoreboard.html")
     else:
         resp = make_response(render_template("scoreboard.html"))
@@ -55,12 +57,13 @@ def button_pressed(jsondata):
 
 
 # https://pythonbasics.org/flask-cookies/
-def cookie_exists(req):
-    user_cookie = req.cookies.get('userID', default='-1')
+def cookie_exists(user_cookie):
     if user_cookie == '-1':
-        return True
-    else:
+        print("no cookie :(")
         return False
+    else:
+        print("yes cookie :)")
+        return True
 
 
 # https://pynative.com/python-generate-random-string/#h-steps-to-create-a-random-string
@@ -71,4 +74,4 @@ def generate_cookie():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, debug=True)
