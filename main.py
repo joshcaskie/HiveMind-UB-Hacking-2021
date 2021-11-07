@@ -36,10 +36,10 @@ def grabQuestionString(conn):
     #     return "no"
     number = random.randint(0, 4)
     with conn.cursor() as cur:
-        cur.execute("SELECT question FROM questions WHERE questionID = " + str(number))
+        cur.execute("SELECT * FROM questions WHERE questionID = " + str(number))
         q = cur.fetchall()
         conn.commit()
-        return q[0][0]
+        return q
 
 
 # Conn for connection to database, ans is the given answer from the user and the question
@@ -81,10 +81,15 @@ def updateScore(conn, score, token):
         cur.execute("UPDATE userinfo SET score = " + updatedScore + " WHERE token = " + token)
         conn.commit()
 
+def grabAllUser(conn):
+    with conn.cursor() as cur:
+        cur.execute("SELECT * FROM userinfo")
+        rows = cur.fetchall()
+        conn.commit()
+        return rows
 
 def main():
     conn_string = input('Enter a connection string:\n')
-
 
     conn = psycopg2.connect(os.path.expandvars(conn_string))
     # with conn.cursor() as cur:
@@ -92,6 +97,7 @@ def main():
     #     cur.execute("DROP TABLE userinfo")
     #     conn.commit()
     makeTables(conn)
+    print(grabQuestionString(conn))
     with conn.cursor() as cur:
         cur.execute("DROP TABLE questions")
         cur.execute("DROP TABLE userinfo")
