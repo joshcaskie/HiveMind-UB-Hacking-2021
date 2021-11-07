@@ -26,8 +26,9 @@ def login():
     return "tbd"
 
 
-@socketio.on('my event')
-def button_pressed(json):
+@socketio.on('answer')
+def button_pressed(jsondata):
+    # send to database
     return "tbd"
 
 
