@@ -21,7 +21,8 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def question_page():
-    if cookie_exists(request):
+    user_cookie = request.cookies.get('userID', default='-1')
+    if cookie_exists(user_cookie):
         return render_template("question.html")
     else:
         resp = make_response(render_template("question.html"))
@@ -31,7 +32,8 @@ def question_page():
 
 @app.route("/scoreboard")
 def scoreboard():
-    if cookie_exists(request):
+    user_cookie = request.cookies.get('userID', default='-1')
+    if cookie_exists(user_cookie):
         return render_template("scoreboard.html")
     else:
         resp = make_response(render_template("scoreboard.html"))
@@ -40,11 +42,11 @@ def scoreboard():
 
 
 @socketio.on('answer')
-def button_pressed(jsondata):
+def button_pressed(data):
     # Handle the choice for the user
-    data = json.loads(jsondata)
-    main.increment("connection thingy", data[data], -1)
-    print(jsondata)
+    answer = data['data']
+    question_id = data['qid']
+    main.increment("connection thingy", answer, question_id)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
@@ -55,12 +57,13 @@ def button_pressed(jsondata):
 
 
 # https://pythonbasics.org/flask-cookies/
-def cookie_exists(req):
-    user_cookie = req.cookies.get('userID', default='-1')
+def cookie_exists(user_cookie):
     if user_cookie == '-1':
-        return True
-    else:
+        print("no cookie :(")
         return False
+    else:
+        print("yes cookie :)")
+        return True
 
 
 # https://pynative.com/python-generate-random-string/#h-steps-to-create-a-random-string
@@ -71,4 +74,4 @@ def generate_cookie():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, debug=True)
