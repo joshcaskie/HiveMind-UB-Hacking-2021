@@ -13,6 +13,8 @@ About
 
 -If users enter the "wrong" answer, they lose points
 
+-At the end when the user has answered all questions, a scoreboard is displayed with all the answers for each question
+
 ---------------
 Features
 ---------------
