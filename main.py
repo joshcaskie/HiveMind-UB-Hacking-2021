@@ -20,6 +20,7 @@ def grabQuestionString(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT question FROM questions WHERE questionID = " + str(number))
         q = cur.fetchall()
+        conn.commit()
         return q[0]
 
 
