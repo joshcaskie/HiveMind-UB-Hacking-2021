@@ -41,19 +41,38 @@ def scoreboard():
         return resp
 
 
-@socketio.on('answer')
-def button_pressed(data):
-    # Handle the choice for the user
-    answer = data['data']
-    question_id = data['qid']
-    main.increment("connection thingy", answer, question_id)
+@app.route("/buttonpress", methods=['POST'])
+def button_press():
+    print(request)
+    request_data_json = request.get_json()
+    request_data = json.loads(request_data_json)
+    answer = request_data['answer']
+    question_id = request_data['qid']
+    userID = request.cookies.get('userID', default='-1')
+    main.increment("db connection thingy", answer, question_id)
 
-    # Emit something for the user to say if they follow the hive or not!
-    # emit('answer_callback', json.dumps({"You are with the hive!"}))
-    emit("answer", {"message" : "you are with the hive"}, json=True)
+    if question_id == main.mostCommon("db connection thingy", question_id):
+        main.updateScore("db connection thingy", 10, userID)
 
-    print("message should have sent!")
-    pass
+
+# @socketio.on('answer')
+# def button_pressed(data):
+#     # Handle the choice for the user
+#     print("data from JS: " + str(data))
+#     answer = data['data']
+#     token = data['uid']
+#     question_id = data['qid']
+#     db_connection = "connection thingy"
+#     main.increment(db_connection, answer, question_id)
+#
+#     if question_id == main.mostCommon(db_connection, question_id):
+#         main.updateScore(db_connection, 10, token)
+#     # Emit something for the user to say if they follow the hive or not!
+#     # emit('answer_callback', json.dumps({"You are with the hive!"}))
+#     emit("answer", {"message" : "you are with the hive"}, json=True)
+#
+#     print("message should have sent!")
+#     pass
 
 
 # https://pythonbasics.org/flask-cookies/
@@ -62,14 +81,14 @@ def cookie_exists(user_cookie):
         print("no cookie :(")
         return False
     else:
-        print("yes cookie :)")
+        print("yes cookie :) " + user_cookie)
         return True
 
 
 # https://pynative.com/python-generate-random-string/#h-steps-to-create-a-random-string
 def generate_cookie():
     characters = string.ascii_letters + string.digits
-    cookie = ''.join(random.choice(characters) for i in range(30))
+    cookie = ''.join(random.choice(characters) for i in range(100))
     return cookie
 
 
