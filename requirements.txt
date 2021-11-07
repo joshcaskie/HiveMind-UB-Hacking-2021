@@ -1,3 +1,4 @@
 flask
 flask-socketio
 psycopg2-binary
+python-dotenv

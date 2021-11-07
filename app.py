@@ -32,6 +32,8 @@ with conn.cursor() as cur:
 main.makeTables(conn)
 conn.close()
 
+users = {}
+
 @app.route("/")
 def question_page():
 
@@ -50,7 +52,7 @@ def question_page():
         choice4 = q_data[6]
 
         # Render
-        return render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id)
+        return render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id, cookie=user_cookie)
     else:
         conn = psycopg2.connect(conn_string)
         q_row = main.grabQuestionString(conn)
@@ -64,9 +66,9 @@ def question_page():
         choice4 = q_data[6]
 
         # Render
-        resp = make_response(render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id))
-
         cookie = generate_cookie()
+        resp = make_response(render_template("question.html", question=question, choice1=choice1, choice2=choice2, choice3=choice3, choice4=choice4, que=id, cookie=cookie))
+
         # print(cookie)
         resp.set_cookie('userID', cookie)
 
@@ -74,9 +76,12 @@ def question_page():
         conn = psycopg2.connect(conn_string)
         main.addNewUser(conn, cookie)
 
+        # Save locally
+        users[cookie] = {}
+
         return resp
 
-
+# This doesn't need to ADD cookies to template; it can generate stuff on post request
 @app.route("/scoreboard")
 def scoreboard():
     conn = psycopg2.connect(conn_string)
@@ -118,10 +123,10 @@ def scoreboard():
             num3 = i[9]
             num4 = i[10]
 
-            print(num1)
-            print(num2)
-            print(num3)
-            print(num4)
+            # print(num1)
+            # print(num2)
+            # print(num3)
+            # print(num4)
 
         return render_template("scoreboard.html", rows=rows)
     else:
@@ -136,6 +141,9 @@ def scoreboard():
         conn = psycopg2.connect(conn_string)
         main.addNewUser(conn, cookie)
 
+        # Save locally
+        users[cookie] = {}
+
         return resp
 
 
@@ -145,11 +153,20 @@ def button_pressed(data):
     # Handle the choice for the user
     answer = data['data']
     que = data['que']
+    cookie = data['cookie']
 #     question_id = data['qid']
 #     main.increment("connection thingy", answer, question_id)
 
     # Emit something for the user to say if they follow the hive or not!
     # emit('answer_callback', json.dumps({"You are with the hive!"}))
+
+    # Save the user did stuff
+    # If the que is already in the users thing, return
+    if que in users[cookie]:
+        emit("answer", {"message" : "You've already answered this!"}, json=True)
+    else:
+        users[cookie][que] = 1
+        emit("answer", {"message" : "You successfully answered!"})
 
     # emit("answer", {"message" : "you are with the hive"}, json=True)
     conn = psycopg2.connect(conn_string)

@@ -26,14 +26,15 @@ function sendAnswer() {
     else {
         console.log(selectedAnswer);
         var que1 = document.getElementById("que").innerHTML;
-        socket.emit('answer', {data: selectedAnswer, que: que1});
-        // document.getElementById("answer").innerHTML = "You selected the current hive's choice!";
+        var cookie1 = document.getElementById("cookie").innerHTML;
+        socket.emit('answer', {data: selectedAnswer, que: que1, cookie: cookie1});
     }
 }
 
 // When the server responds after emitting an 'answer' to the server
 socket.on('answer', function(json) {
     console.log(json);
+    document.getElementById("answer").innerHTML = json["message"];
 });
 
 
