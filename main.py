@@ -18,9 +18,9 @@ def makeTables(conn):
         cur.execute(
             "INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a2','Is every food a soup or a sandwich', 2, 'yes','no','','',0,0,0,0)")
         cur.execute(
-            "INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a3','which orange came first -- the fruit or the color?', 3, 'fruit','color','','',0,0,0,0)")
+            "INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a3','Which orange came first -- the fruit or the color?', 3, 'fruit','color','','',0,0,0,0)")
         cur.execute(
-            "INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a4','what is Ethan Blanton''s last name?', 4, 'Alphonce','Hunt','Hartloff','Ethan',0,0,0,0)")
+            "INSERT INTO questions VALUES ('e755a045-8127-4ab3-b6b4-5906ca0bb1a4','What is Ethan Blanton''s last name?', 4, 'Alphonce','Hunt','Hartloff','Ethan',0,0,0,0)")
         conn.commit()
 
 
