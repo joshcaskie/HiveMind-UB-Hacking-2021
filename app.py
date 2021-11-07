@@ -1,13 +1,15 @@
-from flask import Flask, render_template, request
-from flask_socketio import SocketIO
+from flask import Flask, render_template, request, url_for
+from flask_socketio import SocketIO, emit, send
+import json
 
 # Flask documentation:
 # https://flask.palletsprojects.com/en/2.0.x/quickstart/#static-files
-app = Flask(__name__)
 
 # documentation to get Flask to support SocketIO:
 # https://flask-socketio.readthedocs.io/en/latest/getting_started.html
-app.config['SECRET_KEY'] = 'secret!'
+# app.config['SECRET_KEY'] = 'secret!'
+
+app = Flask(__name__)
 socketio = SocketIO(app)
 
 
@@ -26,9 +28,18 @@ def login():
     return "tbd"
 
 
-@socketio.on('my event')
+@socketio.on('answer')
 def button_pressed(json):
-    return "tbd"
+    # Handle the choice for the user
+    print(json)
+
+
+    # Emit something for the user to say if they follow the hive or not!
+    # emit('answer_callback', json.dumps({"You are with the hive!"}))
+    emit("answer", {"message" : "you are with the hive"}, json=True)
+
+    print("message should have sent!")
+    pass
 
 
 if __name__ == '__main__':
