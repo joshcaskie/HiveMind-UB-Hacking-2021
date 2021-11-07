@@ -1,0 +1,4 @@
+CREATE TABLE userinfo (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), userAnswer STRING, token STRING, score INT)
+CREATE TABLE questions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), question STRING, questionID INT, display1 STRING, display2 STRING, display3 STRING, display4 STRING, answer1 INT, answer2 INT, answer3 INT, answer4 INT)
+
+FROM 
